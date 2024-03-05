@@ -1,41 +1,28 @@
 var level=0;
-var btnColors=[];
+var btnColors=["red","blue","green","yellow"];
 var gamePattern=[];
 var userClickedPattern=[];
-var sound=[];
 var ranChosenColor;
 var userChosenColor;
-var checkSuccess=true;
-btnColors.push("red","blue","green","yellow")
-
 $("#your-turn").hide();
-
 function playSound(color){
     var audio=new Audio("./sounds/"+color+".mp3");
     audio.play();
 }
-
 function animatePress(color){
     $("#"+color).addClass("pressed");
     setTimeout(()=>{        
         $("#"+color).removeClass("pressed");
     },100);
 }
-
 function nextSequence(){
     level++;
     $("#level-title").html("Level "+level);
     userChosenColor=[];
     var ranNum=Math.floor(Math.random()*4);
     ranChosenColor=btnColors[ranNum];
-    gamePattern.push(ranChosenColor);
-    // playSound(ranChosenColor);
-    // setTimeout(()=>{        
-    //     $("#"+ranChosenColor).fadeOut(100).fadeIn(100);
-    // },100);
+    gamePattern.push(ranChosenColor)
 }
-
-
 $(".btn").on("click",function(){
     userChosenColor=$(this).attr("id");
     userClickedPattern.push(userChosenColor);
@@ -43,7 +30,6 @@ $(".btn").on("click",function(){
     animatePress(userChosenColor);
     checkAnswer();
 })
-
 function checkAnswer(){
     if (userChosenColor===gamePattern[count]){
         if (++count==gamePattern.length) {
@@ -55,7 +41,6 @@ function checkAnswer(){
             setTimeout(()=>{
                 gameStart();
             },500)
-            
         }
     }
     else {
@@ -64,12 +49,11 @@ function checkAnswer(){
         setTimeout(()=>{
             $("body").removeClass("game-over");
         },200)
-        $("h1").text("Game Over, Press Any Key to Restart");
+        $("h1").html("Game Over!<br>Press Any Key to Restart");
         gamePattern=[];
         level=0;
     }
 }
-
 function gameStart(){
     count=0;
     userClickedPattern=[];
@@ -92,6 +76,13 @@ function gameStart(){
     },(gamePattern.length+2)*1000);
 }
 $(document).on("keypress",function(){
+    $("#level-title").text("OK, Let's play!");
+    setTimeout(()=>{
+        gameStart();
+    },1000);
+})
+
+$(document).on("touchstart",function(){
     $("#level-title").text("OK, Let's play!");
     setTimeout(()=>{
         gameStart();
